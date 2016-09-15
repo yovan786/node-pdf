@@ -1,0 +1,166 @@
+[{
+	"insurerNo": "756.3047.5009.62",
+	"dob": "1948-12-31 00:00:00",
+	"fullName": "Aebi Anna",
+	"period": {
+		"from": "2001-02-13 00:00:00",
+		"to": "2027-03-13 00:00:00"
+	},
+	"avsSalary": "2800.00",
+	"acSalary": "28042.05",
+	"gender": "F"
+}, {
+	"insurerNo": "756.3426.3448.04",
+	"dob": "1969-04-11 00:00:00",
+	"fullName": "Bosshard Peter",
+	"period": {
+		"from": "2001-01-13 00:00:00",
+		"to": "2031-12-13 00:00:00"
+	},
+	"avsSalary": "",
+	"acSalary": "27000.00",
+	"gender": "M"
+}, {
+	"insurerNo": "756.1925.1163.66",
+	"dob": "1996-01-01 00:00:00",
+	"fullName": "Combertaldi Renato",
+	"period": {
+		"from": "2001-01-13 00:00:00",
+		"to": "2031-12-13 00:00:00"
+	},
+	"avsSalary": "20000.00",
+	"acSalary": "20000.00",
+	"gender": "M"
+}, {
+	"insurerNo": "756.3434.5392.78",
+	"dob": "1977-02-28 00:00:00",
+	"fullName": "Degelo Lorenz",
+	"period": {
+		"from": "2028-02-13 00:00:00",
+		"to": "2001-03-13 00:00:00"
+	},
+	"avsSalary": "",
+	"acSalary": "1050.00",
+	"gender": "M"
+}, {
+	"insurerNo": "756.1927.3247.52",
+	"dob": "1968-07-13 00:00:00",
+	"fullName": "Egli Anna",
+	"period": {
+		"from": "2001-01-13 00:00:00",
+		"to": "2031-12-13 00:00:00"
+	},
+	"avsSalary": "30000.00",
+	"acSalary": "30000.00",
+	"gender": "F"
+}, {
+	"insurerNo": "756.1931.9954.43",
+	"dob": "1947-01-01 00:00:00",
+	"fullName": "Estermann Michael",
+	"period": {
+		"from": "2001-01-13 00:00:00",
+		"to": "2031-12-13 00:00:00"
+	},
+	"avsSalary": "16800.00",
+	"acSalary": "155000.00",
+	"gender": "M"
+}, {
+	"insurerNo": "756.6353.2927.43",
+	"dob": "1957-10-19 00:00:00",
+	"fullName": "Fankhauser Markus",
+	"period": {
+		"from": "2001-01-12 00:00:00",
+		"to": "2031-12-12 00:00:00"
+	},
+	"avsSalary": "",
+	"acSalary": "40000.00",
+	"gender": "M"
+}, {
+	"insurerNo": "756.6417.0995.23",
+	"dob": "1949-02-05 00:00:00",
+	"fullName": "Lusser Pia",
+	"period": {
+		"from": "2001-03-13 00:00:00",
+		"to": "2031-12-13 00:00:00"
+	},
+	"avsSalary": "5600.00",
+	"acSalary": "5600.00",
+	"gender": "F"
+}, {
+	"insurerNo": "756.3560.4682.44",
+	"dob": "1948-09-28 00:00:00",
+	"fullName": "Martin René",
+	"period": {
+		"from": "2001-10-13 00:00:00",
+		"to": "2031-12-13 00:00:00"
+	},
+	"avsSalary": "",
+	"acSalary": "-9000.00",
+	"gender": "M"
+}, {
+	"insurerNo": "756.3574.4165.90",
+	"dob": "1946-04-15 00:00:00",
+	"fullName": "Moser Johann",
+	"period": {
+		"from": "2001-01-12 00:00:00",
+		"to": "2031-12-12 00:00:00"
+	},
+	"avsSalary": "2800.00",
+	"acSalary": "6000.00",
+	"gender": "M"
+}, {
+	"insurerNo": "756.6444.1627.57",
+	"dob": "1980-10-04 00:00:00",
+	"fullName": "Nestler Paula",
+	"period": {
+		"from": "2001-01-13 00:00:00",
+		"to": "2031-12-13 00:00:00"
+	},
+	"avsSalary": "",
+	"acSalary": "25200.00",
+	"gender": "F"
+}, {
+	"insurerNo": "756.6458.7191.14",
+	"dob": "1949-02-04 00:00:00",
+	"fullName": "Nunez Maria",
+	"period": {
+		"from": "2001-03-13 00:00:00",
+		"to": "2031-12-13 00:00:00"
+	},
+	"avsSalary": "14000.00",
+	"acSalary": "14500.00",
+	"gender": "F"
+}, {
+	"insurerNo": "756.3598.1127.37",
+	"dob": "1949-09-30 00:00:00",
+	"fullName": "Paganini Maria",
+	"period": {
+		"from": "2001-10-13 00:00:00",
+		"to": "2031-12-13 00:00:00"
+	},
+	"avsSalary": "4200.00",
+	"acSalary": "10200.00",
+	"gender": "F"
+}, {
+	"insurerNo": "756.3615.1318.33",
+	"dob": "1947-08-26 00:00:00",
+	"fullName": "Racine Susette",
+	"period": {
+		"from": "2001-01-12 00:00:00",
+		"to": "2031-12-12 00:00:00"
+	},
+	"avsSalary": "-6800.00",
+	"acSalary": "-10000.00",
+	"gender": "F"
+}, {
+	"insurerNo": "756.6532.7168.79",
+	"dob": "1947-11-11 00:00:00",
+	"fullName": "Schüpbach Ernst",
+	"period": {
+		"from": "2020-02-13 00:00:00",
+		"to": "2015-03-13 00:00:00"
+	},
+	"avsSalary": "2800.00",
+	"acSalary": "5000.00",
+	"gender": "M"
+}]

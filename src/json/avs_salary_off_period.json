@@ -1,0 +1,106 @@
+[{
+		"insurerNo": "756.1886.7922.72",
+		"dob": "1967-06-30 00:00:00",
+		"fullName": "Burri Heidi",
+		"period": {
+			"from": "2001-01-13 00:00:00",
+			"to": "2031-03-13 00:00:00"
+		},
+		"avsSalary": "2000.00",
+		"acSalary": "2000.00",
+		"acComplementarySalary": "",
+		"gender": "F"
+	}, {
+		"insurerNo": "756.6353.2927.43",
+		"dob": "1967-06-30 00:00:00",
+		"fullName": "Fankhauser Markus",
+		"period": {
+			"from": "2001-01-13 00:00:00",
+			"to": "2031-03-13 00:00:00"
+		},
+		"avsSalary": "40000.00",
+		"acSalary": "",
+		"acComplementarySalary": "",
+		"gender": "M"
+	}, {
+		"insurerNo": "756.3552.6511.80",
+		"dob": "1967-06-30 00:00:00",
+		"fullName": "Lamon René",
+		"period": {
+			"from": "2001-01-13 00:00:00",
+			"to": "2031-03-13 00:00:00"
+		},
+		"avsSalary": "31109.00",
+		"acSalary": "22334.25",
+		"acComplementarySalary": "8775.10",
+		"gender": "M"
+	}, {
+		"insurerNo": "756.3574.4165.90",
+		"dob": "1967-06-30 00:00:00",
+		"fullName": "Moser Johann",
+		"period": {
+			"from": "2001-01-13 00:00:00",
+			"to": "2031-03-13 00:00:00"
+		},
+		"avsSalary": "3200.00",
+		"acSalary": "",
+		"acComplementarySalary": "",
+		"gender": "M"
+	},
+
+	{
+		"insurerNo": "756.6496.0371.71",
+		"dob": "1967-06-30 00:00:00",
+		"fullName": "Perret Michelle",
+		"period": {
+			"from": "2001-01-13 00:00:00",
+			"to": "2031-03-13 00:00:00"
+		},
+		"avsSalary": "-5200.00",
+		"acSalary": "",
+		"acComplementarySalary": "-5200.00",
+		"gender": "F"
+	},
+
+	{
+		"insurerNo": "756.3615.1318.33",
+		"dob": "1967-06-30 00:00:00",
+		"fullName": "Racine Susette",
+		"period": {
+			"from": "2001-01-13 00:00:00",
+			"to": "2031-03-13 00:00:00"
+		},
+		"avsSalary": "-3200.00",
+		"acSalary": "",
+		"acComplementarySalary": "",
+		"gender": "F"
+	},
+
+	{
+		"insurerNo": "756.3630.0728.90",
+		"dob": "1967-06-30 00:00:00",
+		"fullName": "Rieder Catia",
+		"period": {
+			"from": "2001-01-13 00:00:00",
+			"to": "2031-03-13 00:00:00"
+		},
+		"avsSalary": "22000.00",
+		"acSalary": "10000.00",
+		"acComplementarySalary": "12000.00",
+		"gender": "F"
+	},
+
+	{
+		"insurerNo": "756.6564.5197.21",
+		"dob": "1967-06-30 00:00:00",
+		"fullName": "Zahnd Anita",
+		"period": {
+			"from": "2001-01-13 00:00:00",
+			"to": "2031-03-13 00:00:00"
+		},
+		"avsSalary": "-15000.00",
+		"acSalary": "-8000.00",
+		"acComplementarySalary": "-7000.00",
+		"gender": "F"
+	}
+]

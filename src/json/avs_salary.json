@@ -1,0 +1,313 @@
+[{
+	"insurerNo": "Inconnu",
+	"dob": "1967-06-30 00:00:00",
+	"fullName": "Herz Monica",
+	"period": {
+		"from": "2001-01-13 00:00:00",
+		"to": "2031-03-13 00:00:00"
+	},
+	"avsSalary": "36800.00",
+	"acSalary": "31500.00",
+	"acComplementarySalary": "5300.00",
+	"gender": "F"
+}, {
+	"insurerNo": "756.3047.5009.62",
+	"dob": "1948-12-31 00:00:00",
+	"fullName": "Aebi Anna",
+	"period": {
+		"from": "2001-02-13 00:00:00",
+		"to": "2027-03-13 00:00:00"
+	},
+	"avsSalary": "25242.05",
+	"acSalary": "",
+	"acComplementarySalary": "",
+	"gender": "F"
+}, {
+	"insurerNo": "756.3426.3448.04",
+	"dob": "1969-04-11 00:00:00",
+	"fullName": "Bosshard Peter",
+	"period": {
+		"from": "2001-01-13 00:00:00",
+		"to": "2031-12-13 00:00:00"
+	},
+	"avsSalary": "342000.00",
+	"acSalary": "126000.00",
+	"acComplementarySalary": "189000.00",
+	"gender": "M"
+}, {
+	"insurerNo": "756.3431.9824.73",
+	"dob": "1995-01-01 00:00:00",
+	"fullName": "Casanova Renato",
+	"period": {
+		"from": "2027-02-13 00:00:00",
+		"to": "2031-12-13 00:00:00"
+	},
+	"avsSalary": "139500.00",
+	"acSalary": "106400.00",
+	"acComplementarySalary": "33100.00",
+	"gender": "M"
+}, {
+	"insurerNo": "756.3434.5392.78",
+	"dob": "1977-02-28 00:00:00",
+	"fullName": "Degelo Lorenz",
+	"period": {
+		"from": "2028-02-13 00:00:00",
+		"to": "2001-03-13 00:00:00"
+	},
+	"avsSalary": "2800.00",
+	"acSalary": "700.0",
+	"acComplementarySalary": "1050.00",
+	"gender": "M"
+}, {
+	"insurerNo": "756.6328.7099.17",
+	"dob": "1976-12-11 00:00:00",
+	"fullName": "Duss Regula",
+	"period": {
+		"from": "2001-01-13 00:00:00",
+		"to": "2031-10-13 00:00:00"
+	},
+	"avsSalary": "142000.00",
+	"acSalary": "105000.00",
+	"acComplementarySalary": "37000.00",
+	"gender": "F"
+}, {
+	"insurerNo": "756.1931.9954.43",
+	"dob": "1947-01-01 00:00:00",
+	"fullName": "Estermann Michael",
+	"period": {
+		"from": "2001-01-13 00:00:00",
+		"to": "2031-12-13 00:00:00"
+	},
+	"avsSalary": "138200.00",
+	"acSalary": "",
+	"acComplementarySalary": "",
+	"gender": "M"
+}, {
+	"insurerNo": "756.3438.2653.71",
+	"dob": "1987-06-17 00:00:00",
+	"fullName": "Farine Corinne",
+	"period": {
+		"from": "2001-01-13 00:00:00",
+		"to": "2028-02-13 00:00:00"
+	},
+	"avsSalary": "25300.00",
+	"acSalary": "21000.00",
+	"acComplementarySalary": "4300.00",
+	"gender": "F"
+}, {
+	"insurerNo": "756.3438.2653.71",
+	"dob": "1987-06-17 00:00:00",
+	"fullName": "Farine Corinne",
+	"period": {
+		"from": "2031-10-13 00:00:00",
+		"to": "2031-12-13 00:00:00"
+	},
+	"avsSalary": "36000.00",
+	"acSalary": "21350.00",
+	"acComplementarySalary": "14650.00",
+	"gender": "F"
+}, {
+	"insurerNo": "756.3454.9922.51",
+	"dob": "1956-06-18 00:00:00",
+	"fullName": "Ganz Edith",
+	"period": {
+		"from": "2001-01-13 00:00:00",
+		"to": "2027-02-13 00:00:00"
+	},
+	"avsSalary": "21000.00",
+	"acSalary": "19950.00",
+	"acComplementarySalary": "1050.00",
+	"gender": "F"
+}, {
+	"insurerNo": "756.6362.5066.57",
+	"dob": "1987-02-28 00:00:00",
+	"fullName": "Ganz Heinz",
+	"period": {
+		"from": "2001-02-13 00:00:00",
+		"to": "2031-10-13 00:00:00"
+	},
+	"avsSalary": "50700.00",
+	"acSalary": "50700.00",
+	"acComplementarySalary": "",
+	"gender": "M"
+}, {
+	"insurerNo": "756.1934.1678.78",
+	"dob": "1980-10-15 00:00:00",
+	"fullName": "Inglese Rosa",
+	"period": {
+		"from": "2001-01-13 00:00:00",
+		"to": "2031-03-13 00:00:00"
+	},
+	"avsSalary": "9750.00",
+	"acSalary": "9750.00",
+	"acComplementarySalary": "",
+	"gender": "F"
+}, {
+	"insurerNo": "756.1934.1678.78",
+	"dob": "1980-10-15 00:00:00",
+	"fullName": "Inglese Rosa",
+	"period": {
+		"from": "2001-10-13 00:00:00",
+		"to": "2031-10-13 00:00:00"
+	},
+	"avsSalary": "5450.00",
+	"acSalary": "5450.00",
+	"acComplementarySalary": "",
+	"gender": "F"
+}, {
+	"insurerNo": "756.1934.1678.78",
+	"dob": "1980-10-15 00:00:00",
+	"fullName": "Inglese Rosa",
+	"period": {
+		"from": "2001-12-13 00:00:00",
+		"to": "2031-12-13 00:00:00"
+	},
+	"avsSalary": "11600.00",
+	"acSalary": "10500.00",
+	"acComplementarySalary": "1100.00",
+	"gender": "F"
+}, {
+	"insurerNo": "756.3514.6025.02",
+	"dob": "1989-03-23 00:00:00",
+	"fullName": "Jung Claude",
+	"period": {
+		"from": "2001-01-13 00:00:00",
+		"to": "2031-10-13 00:00:00"
+	},
+	"avsSalary": "97500.00",
+	"acSalary": "97500.00",
+	"acComplementarySalary": "",
+	"gender": "M"
+}, {
+	"insurerNo": "756.6412.9848.00",
+	"dob": "1961-08-15 00:00:00",
+	"fullName": "Kaiser Beat",
+	"period": {
+		"from": "2001-01-13 00:00:00",
+		"to": "2031-12-13 00:00:00"
+	},
+	"avsSalary": "21000.00",
+	"acSalary": "21000.00",
+	"acComplementarySalary": "",
+	"gender": "M"
+}, {
+	"insurerNo": "756.6417.0995.23",
+	"dob": "1949-02-05 00:00:00",
+	"fullName": "Lusser Pia",
+	"period": {
+		"from": "2001-01-13 00:00:00",
+		"to": "2028-02-13 00:00:00"
+	},
+	"avsSalary": "4000.00",
+	"acSalary": "4000.00",
+	"acComplementarySalary": "",
+	"gender": "F"
+}, {
+	"insurerNo": "756.3560.4682.44",
+	"dob": "1948-09-28 00:00:00",
+	"fullName": "Martin René",
+	"period": {
+		"from": "2001-03-13 00:00:00",
+		"to": "2030-09-13 00:00:00"
+	},
+	"avsSalary": "5000.00",
+	"acSalary": "5000.00",
+	"acComplementarySalary": "",
+	"gender": "M"
+}, {
+	"insurerNo": "756.3560.4682.44",
+	"dob": "1948-09-28 00:00:00",
+	"fullName": "Martin René",
+	"period": {
+		"from": "2001-10-13 00:00:00",
+		"to": "2031-12-13 00:00:00"
+	},
+	"avsSalary": "-9000.00",
+	"acSalary": "",
+	"acComplementarySalary": "",
+	"gender": "M"
+}, {
+	"insurerNo": "756.6444.1627.57",
+	"dob": "1980-10-04 00:00:00",
+	"fullName": "Nestler Paula",
+	"period": {
+		"from": "2001-01-13 00:00:00",
+		"to": "2031-12-13 00:00:00"
+	},
+	"avsSalary": "340200.00",
+	"acSalary": "126000.00",
+	"acComplementarySalary": "189000.00",
+	"gender": "F"
+}, {
+	"insurerNo": "756.6458.7191.14",
+	"dob": "1949-02-04 00:00:00",
+	"fullName": "Nunez Maria",
+	"period": {
+		"from": "2001-01-13 00:00:00",
+		"to": "2028-02-13 00:00:00"
+	},
+	"avsSalary": "23500.00",
+	"acSalary": "21000.00",
+	"acComplementarySalary": "2500.00",
+	"gender": "F"
+}, {
+	"insurerNo": "756.6458.7191.14",
+	"dob": "1949-02-04 00:00:00",
+	"fullName": "Nunez Maria",
+	"period": {
+		"from": "2001-03-13 00:00:00",
+		"to": "2031-12-13 00:00:00"
+	},
+	"avsSalary": "500.0",
+	"acSalary": "",
+	"acComplementarySalary": "",
+	"gender": "F"
+}, {
+	"insurerNo": "756.1940.8577.01",
+	"dob": "1995-12-30 00:00:00",
+	"fullName": "Ott Hans",
+	"period": {
+		"from": "2001-01-13 00:00:00",
+		"to": "2031-12-13 00:00:00"
+	},
+	"avsSalary": "25600.00",
+	"acSalary": "25600.00",
+	"acComplementarySalary": "",
+	"gender": "M"
+}, {
+	"insurerNo": "756.3598.1127.37",
+	"dob": "1949-09-30 00:00:00",
+	"fullName": "Paganini Maria",
+	"period": {
+		"from": "2001-01-13 00:00:00",
+		"to": "2030-09-13 00:00:00"
+	},
+	"avsSalary": "10200.00",
+	"acSalary": "10200.00",
+	"acComplementarySalary": "",
+	"gender": "F"
+}, {
+	"insurerNo": "756.3598.1127.37",
+	"dob": "1949-09-30 00:00:00",
+	"fullName": "Paganini Maria",
+	"period": {
+		"from": "2001-10-13 00:00:00",
+		"to": "2031-12-13 00:00:00"
+	},
+	"avsSalary": "6000.00",
+	"acSalary": "",
+	"acComplementarySalary": "",
+	"gender": "F"
+}, {
+	"insurerNo": "756.6532.7168.79",
+	"dob": "1947-11-11 00:00:00",
+	"fullName": "Schüpbach Ernst",
+	"period": {
+		"from": "2020-02-13 00:00:00",
+		"to": "2015-03-13 00:00:00"
+	},
+	"avsSalary": "2200.00",
+	"acSalary": "",
+	"acComplementarySalary": "",
+	"gender": "M"
+}]
