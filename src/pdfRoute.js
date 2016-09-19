@@ -1,39 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var fs = require("fs");
+var fs = require('fs');
 var dateFormat = require('dateFormat');
 var PdfPrinter = require('pdfmake');
-var blobStream  = require('blob-stream');
-
-var headers = ["Numéro d'assuré", "Date de naissance", "Nom et prénom", "du", "au", "Salaire AVS", "Salaire AC", "Salaire compl. AC", "M/F"];
-
-var header_blue_velvet = "#16365C";
-var header_white = "#fff"
-var zebra_blue_gray = "#B8CCE4";
-var zebra_gray = "#DCE6F1";
-
-var avs_certificate = 'Attestation de salaires AVS';
-var version  = 'Version_4.0_20141031';
-
-var sumAvs = 0;
-var sumAc = 0;
-var sumComplementaryAC = 0;
-
-var address = {
-	locality: 'Muster',
-	canton: 'AG',
-	street: 'Bahnhofstrasse 1',
-	zipCode: '6002',
-	nom_canton: 'Luzern'
-};
-
-var compensation_fund = "Caisse de compensation AVS Lucerne";
-var member_no = "Numéro de membre";
-
-var member_info = {
-	fund: "003.000",
-	member_no: "100-9976.9"
-};
+var avsFactory  = require('./avsFactory');
 
 var fonts = {
 	Roboto: {
@@ -45,330 +15,200 @@ var fonts = {
 };
 
 var printer = new PdfPrinter(fonts);
-var tempFileBase64 = ''
+
+var blue_velvet = '#16365C';
+var white = '#fff';
+var blue_gray = '#B8CCE4';
+var gray = '#DCE6F1';
+var black = '#000';
+
+var occupation_period = 'Période d\' occupation';
+var avs_certificate = 'Attestation de salaires AVS';
+var avs_excluded_period = 'Attestation de salaires AVS, Hors période Revenus';
+var recap = 'Récapitulation Attestation de salaires AVS';
+var version  = 'Version_4.0_20141031';
+var compensation_fund = 'Caisse de compensation AVS Lucerne';
+var member_no = 'Numéro de membre';
+var revenuePeriod = 'Période concernée Revenus';
+var excludedPeriodRevenue = 'Hors période Revenus';
+var general_total = 'Total général';
+var year = '2013';
+
+var lpp_insurer = 'Assureur LPP: ';
+var laa_insurer = 'Assureur LAA: ';
+var lpp_insurer_name = 'Pensionskasse Oldsoft';
+var lpp_contract_no = '4500-0';
+var laa_insurer_name = 'Backwork-Versicherungen';
+var laa_client_no = '12577.2';
+
+var address = {
+	locality: 'Muster',
+	canton: 'AG',
+	street: 'Bahnhofstrasse 1',
+	zipCode: '6002',
+	nom_canton: 'Luzern'
+};
+
+var member_info = {
+	fund: '003.000',
+	member_no: '100-9976.9'
+};
+
+function setPageBreak() {
+	return {text: '', pageBreak: 'before'};
+}
+
+function addOccupationPeriod(headers, position) {
+	headers.splice(position, 0, {table: {body:[[{text: occupation_period, colSpan: 2}, {}], ['du', 'au']], widths:['*', '*']}, colSpan: 2, layout: 'noBorders', style: ['header', 'align_center'], margin:[0, 8, 0, -3]});
+	headers.splice(position + 1, 0, {});
+}
+
+function formatAmount(x) {
+	return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
+}
+
+var formattedDate = function (date) {
+	if (date && '' != date) {
+		var d = new Date(date),
+		month = '' + (d.getMonth() + 1),
+		day = '' + d.getDate(),
+		year = d.getFullYear();
+		if (month.length < 2) month = '0' + month;
+		if (day.length < 2) day = '0' + day;
+		return [day, month, year].join('.');
+	} else {
+		return '';
+	}
+};
+
+var formattedDate2 = function (date) {
+	if (date && '' != date) {
+		var d = new Date(date),
+		month = '' + (d.getMonth() + 1),
+		day = '' + d.getDate(),
+		year = d.getFullYear().toString().substr(2,2);
+		if (month.length < 2) month = '0' + month;
+		if (day.length < 2) day = '0' + day;
+		return [day, month, year].join('.');
+	} else {
+		return '';
+	}
+};
+
+function calcSum (a, b) {
+	return ((a * 1000) + (b * 1000)) / 1000;
+}
 
 router.get('/', function(req, res) {
-	var data = [{
-		"insurerNo": "Inconnu",
-		"dob": "1967-06-30 00:00:00",
-		"fullName": "Herz Monica",
-		"period": {
-			"from": "2001-01-13 00:00:00",
-			"to": "2031-03-13 00:00:00"
-		},
-		"avsSalary": "36800.00",
-		"acSalary": "31500.00",
-		"acComplementarySalary": "5300.00",
-		"gender": "F"
-	}, {
-		"insurerNo": "756.3047.5009.62",
-		"dob": "1948-12-31 00:00:00",
-		"fullName": "Aebi Anna",
-		"period": {
-			"from": "2001-02-13 00:00:00",
-			"to": "2027-03-13 00:00:00"
-		},
-		"avsSalary": "25242.05",
-		"acSalary": "",
-		"acComplementarySalary": "",
-		"gender": "F"
-	}, {
-		"insurerNo": "756.3426.3448.04",
-		"dob": "1969-04-11 00:00:00",
-		"fullName": "Bosshard Peter",
-		"period": {
-			"from": "2001-01-13 00:00:00",
-			"to": "2031-12-13 00:00:00"
-		},
-		"avsSalary": "342000.00",
-		"acSalary": "126000.00",
-		"acComplementarySalary": "189000.00",
-		"gender": "M"
-	}, {
-		"insurerNo": "756.3431.9824.73",
-		"dob": "1995-01-01 00:00:00",
-		"fullName": "Casanova Renato",
-		"period": {
-			"from": "2027-02-13 00:00:00",
-			"to": "2031-12-13 00:00:00"
-		},
-		"avsSalary": "139500.00",
-		"acSalary": "106400.00",
-		"acComplementarySalary": "33100.00",
-		"gender": "M"
-	}, {
-		"insurerNo": "756.3434.5392.78",
-		"dob": "1977-02-28 00:00:00",
-		"fullName": "Degelo Lorenz",
-		"period": {
-			"from": "2028-02-13 00:00:00",
-			"to": "2001-03-13 00:00:00"
-		},
-		"avsSalary": "2800.00",
-		"acSalary": "700.0",
-		"acComplementarySalary": "1050.00",
-		"gender": "M"
-	}, {
-		"insurerNo": "756.6328.7099.17",
-		"dob": "1976-12-11 00:00:00",
-		"fullName": "Duss Regula",
-		"period": {
-			"from": "2001-01-13 00:00:00",
-			"to": "2031-10-13 00:00:00"
-		},
-		"avsSalary": "142000.00",
-		"acSalary": "105000.00",
-		"acComplementarySalary": "37000.00",
-		"gender": "F"
-	}, {
-		"insurerNo": "756.1931.9954.43",
-		"dob": "1947-01-01 00:00:00",
-		"fullName": "Estermann Michael",
-		"period": {
-			"from": "2001-01-13 00:00:00",
-			"to": "2031-12-13 00:00:00"
-		},
-		"avsSalary": "138200.00",
-		"acSalary": "",
-		"acComplementarySalary": "",
-		"gender": "M"
-	}, {
-		"insurerNo": "756.3438.2653.71",
-		"dob": "1987-06-17 00:00:00",
-		"fullName": "Farine Corinne",
-		"period": {
-			"from": "2001-01-13 00:00:00",
-			"to": "2028-02-13 00:00:00"
-		},
-		"avsSalary": "25300.00",
-		"acSalary": "21000.00",
-		"acComplementarySalary": "4300.00",
-		"gender": "F"
-	}, {
-		"insurerNo": "756.3438.2653.71",
-		"dob": "1987-06-17 00:00:00",
-		"fullName": "Farine Corinne",
-		"period": {
-			"from": "2031-10-13 00:00:00",
-			"to": "2031-12-13 00:00:00"
-		},
-		"avsSalary": "36000.00",
-		"acSalary": "21350.00",
-		"acComplementarySalary": "14650.00",
-		"gender": "F"
-	}, {
-		"insurerNo": "756.3454.9922.51",
-		"dob": "1956-06-18 00:00:00",
-		"fullName": "Ganz Edith",
-		"period": {
-			"from": "2001-01-13 00:00:00",
-			"to": "2027-02-13 00:00:00"
-		},
-		"avsSalary": "21000.00",
-		"acSalary": "19950.00",
-		"acComplementarySalary": "1050.00",
-		"gender": "F"
-	}, {
-		"insurerNo": "756.6362.5066.57",
-		"dob": "1987-02-28 00:00:00",
-		"fullName": "Ganz Heinz",
-		"period": {
-			"from": "2001-02-13 00:00:00",
-			"to": "2031-10-13 00:00:00"
-		},
-		"avsSalary": "50700.00",
-		"acSalary": "50700.00",
-		"acComplementarySalary": "",
-		"gender": "M"
-	}, {
-		"insurerNo": "756.1934.1678.78",
-		"dob": "1980-10-15 00:00:00",
-		"fullName": "Inglese Rosa",
-		"period": {
-			"from": "2001-01-13 00:00:00",
-			"to": "2031-03-13 00:00:00"
-		},
-		"avsSalary": "9750.00",
-		"acSalary": "9750.00",
-		"acComplementarySalary": "",
-		"gender": "F"
-	}, {
-		"insurerNo": "756.1934.1678.78",
-		"dob": "1980-10-15 00:00:00",
-		"fullName": "Inglese Rosa",
-		"period": {
-			"from": "2001-10-13 00:00:00",
-			"to": "2031-10-13 00:00:00"
-		},
-		"avsSalary": "5450.00",
-		"acSalary": "5450.00",
-		"acComplementarySalary": "",
-		"gender": "F"
-	}, {
-		"insurerNo": "756.1934.1678.78",
-		"dob": "1980-10-15 00:00:00",
-		"fullName": "Inglese Rosa",
-		"period": {
-			"from": "2001-12-13 00:00:00",
-			"to": "2031-12-13 00:00:00"
-		},
-		"avsSalary": "11600.00",
-		"acSalary": "10500.00",
-		"acComplementarySalary": "1100.00",
-		"gender": "F"
-	}, {
-		"insurerNo": "756.3514.6025.02",
-		"dob": "1989-03-23 00:00:00",
-		"fullName": "Jung Claude",
-		"period": {
-			"from": "2001-01-13 00:00:00",
-			"to": "2031-10-13 00:00:00"
-		},
-		"avsSalary": "97500.00",
-		"acSalary": "97500.00",
-		"acComplementarySalary": "",
-		"gender": "M"
-	}, {
-		"insurerNo": "756.6412.9848.00",
-		"dob": "1961-08-15 00:00:00",
-		"fullName": "Kaiser Beat",
-		"period": {
-			"from": "2001-01-13 00:00:00",
-			"to": "2031-12-13 00:00:00"
-		},
-		"avsSalary": "21000.00",
-		"acSalary": "21000.00",
-		"acComplementarySalary": "",
-		"gender": "M"
-	}, {
-		"insurerNo": "756.6417.0995.23",
-		"dob": "1949-02-05 00:00:00",
-		"fullName": "Lusser Pia",
-		"period": {
-			"from": "2001-01-13 00:00:00",
-			"to": "2028-02-13 00:00:00"
-		},
-		"avsSalary": "4000.00",
-		"acSalary": "4000.00",
-		"acComplementarySalary": "",
-		"gender": "F"
-	}, {
-		"insurerNo": "756.3560.4682.44",
-		"dob": "1948-09-28 00:00:00",
-		"fullName": "Martin René",
-		"period": {
-			"from": "2001-03-13 00:00:00",
-			"to": "2030-09-13 00:00:00"
-		},
-		"avsSalary": "5000.00",
-		"acSalary": "5000.00",
-		"acComplementarySalary": "",
-		"gender": "M"
-	}, {
-		"insurerNo": "756.3560.4682.44",
-		"dob": "1948-09-28 00:00:00",
-		"fullName": "Martin René",
-		"period": {
-			"from": "2001-10-13 00:00:00",
-			"to": "2031-12-13 00:00:00"
-		},
-		"avsSalary": "-9000.00",
-		"acSalary": "",
-		"acComplementarySalary": "",
-		"gender": "M"
-	}, {
-		"insurerNo": "756.6444.1627.57",
-		"dob": "1980-10-04 00:00:00",
-		"fullName": "Nestler Paula",
-		"period": {
-			"from": "2001-01-13 00:00:00",
-			"to": "2031-12-13 00:00:00"
-		},
-		"avsSalary": "340200.00",
-		"acSalary": "126000.00",
-		"acComplementarySalary": "189000.00",
-		"gender": "F"
-	}, {
-		"insurerNo": "756.6458.7191.14",
-		"dob": "1949-02-04 00:00:00",
-		"fullName": "Nunez Maria",
-		"period": {
-			"from": "2001-01-13 00:00:00",
-			"to": "2028-02-13 00:00:00"
-		},
-		"avsSalary": "23500.00",
-		"acSalary": "21000.00",
-		"acComplementarySalary": "2500.00",
-		"gender": "F"
-	}, {
-		"insurerNo": "756.6458.7191.14",
-		"dob": "1949-02-04 00:00:00",
-		"fullName": "Nunez Maria",
-		"period": {
-			"from": "2001-03-13 00:00:00",
-			"to": "2031-12-13 00:00:00"
-		},
-		"avsSalary": "500.0",
-		"acSalary": "",
-		"acComplementarySalary": "",
-		"gender": "F"
-	}, {
-		"insurerNo": "756.1940.8577.01",
-		"dob": "1995-12-30 00:00:00",
-		"fullName": "Ott Hans",
-		"period": {
-			"from": "2001-01-13 00:00:00",
-			"to": "2031-12-13 00:00:00"
-		},
-		"avsSalary": "25600.00",
-		"acSalary": "25600.00",
-		"acComplementarySalary": "",
-		"gender": "M"
-	}, {
-		"insurerNo": "756.3598.1127.37",
-		"dob": "1949-09-30 00:00:00",
-		"fullName": "Paganini Maria",
-		"period": {
-			"from": "2001-01-13 00:00:00",
-			"to": "2030-09-13 00:00:00"
-		},
-		"avsSalary": "10200.00",
-		"acSalary": "10200.00",
-		"acComplementarySalary": "",
-		"gender": "F"
-	}, {
-		"insurerNo": "756.3598.1127.37",
-		"dob": "1949-09-30 00:00:00",
-		"fullName": "Paganini Maria",
-		"period": {
-			"from": "2001-10-13 00:00:00",
-			"to": "2031-12-13 00:00:00"
-		},
-		"avsSalary": "6000.00",
-		"acSalary": "",
-		"acComplementarySalary": "",
-		"gender": "F"
-	}, {
-		"insurerNo": "756.6532.7168.79",
-		"dob": "1947-11-11 00:00:00",
-		"fullName": "Schüpbach Ernst",
-		"period": {
-			"from": "2020-02-13 00:00:00",
-			"to": "2015-03-13 00:00:00"
-		},
-		"avsSalary": "2200.00",
-		"acSalary": "",
-		"acComplementarySalary": "",
-		"gender": "M"
-	}];
-	var pdfData = generate(data, req, res);
+	var pdfData = generate(avsFactory, req, res);
 });
 
-function generate(data, req, res) {
-	headers = headers.map(function  (item) {
+function setInsurerTable() {
+	return [
+	{
+		table: {
+			widths: ['25%', '70%'],
+			body: [
+			[{text: lpp_insurer}, {text: lpp_insurer_name + ', ' + lpp_contract_no, marginBottom: 10}],
+			[{text: laa_insurer}, {text: laa_insurer_name + ', ' + laa_client_no}],
+			]
+		}, 
+		layout: 'noBorders',
+		style: ['common'],
+		margin: [0, 15, 0, 15]
+	}
+	];
+}
+
+
+function setSubData(title, year, version, address, compensation_fund, member_info, header) {
+	if(!header)
+		header = 'header'
+	return [{
+		table: {
+			widths: [ 200, 'auto'],
+			body: [
+			[{ text: title, style: [header]}, {text: year + '', style: [header]}], 
+			[version, '']
+			]
+		}, 
+		layout: 'noBorders',
+		style: ['common']
+	},
+	{
+		table: {
+			widths: [ 100, 'auto', 'auto'],
+			body: [
+			[ address.locality + ' ' + address.canton, {text: compensation_fund, alignment: 'right'}, {text: member_info.fund, alignment: 'right'}],
+			[ address.street, {text: member_no, alignment: 'right'}, {text: member_info.member_no, alignment: 'right'}],
+			[address.zipCode + ' ' + address.nom_canton, '', '']
+			]
+		},
+		layout: 'noBorders',
+		style: ['common'],
+		marginBottom: 10
+	}];
+}
+
+function getSumData(data) {
+	var sumHeaders = ['Récapitulation', 'Salaire AVS', 'Salaire AC', 'Salaire compl. AC', ''];
+
+	sumHeaders =  sumHeaders.map(function  (item) {
 		return {text: item, style: ['header', 'table_border']}
 	});
+	var formattedData = [sumHeaders];
+	
+	var fillColor = blue_gray;
+	formattedData.push([
+		{text: revenuePeriod, fillColor: fillColor},
+		{text: formatAmount(data.avsInclusive.avs), fillColor: fillColor, style: ['align_right']},
+		{text: formatAmount(data.avsInclusive.ac), fillColor: fillColor, style: ['align_right']},
+		{text: formatAmount(data.avsInclusive.complementaryAc), fillColor: fillColor, style: ['align_right']},
+		{text: '', fillColor: fillColor}
+		]);
 
+	fillColor = gray;
+
+	formattedData.push([
+		{text: excludedPeriodRevenue, fillColor: fillColor},
+		{text: formatAmount(data.avsExclusive.avs), fillColor: fillColor, style: ['align_right']},
+		{text: formatAmount(data.avsExclusive.ac), fillColor: fillColor, style: ['align_right']},
+		{text: formatAmount(data.avsExclusive.complementaryAc), fillColor: fillColor, style: ['align_right']},
+		{text: '', fillColor: fillColor}
+		]);
+
+	formattedData.push([
+	{
+		table: {
+			widths: ['*', '*'],
+			body: [
+			[{text: general_total, style: ['header']}, {text: ''}]
+			]
+		},
+		layout: 'noBorders'
+	},
+	{text: formatAmount(calcSum(data.avsInclusive.avs, data.avsExclusive.avs)), style: ['header']},
+	{text: formatAmount(calcSum(data.avsInclusive.ac, data.avsExclusive.ac)), style: ['header']},
+	{text: formatAmount(calcSum(data.avsInclusive.complementaryAc, data.avsExclusive.complementaryAc)), style: ['header']},
+	''
+	]);
+
+	return formattedData;
+}
+
+function getMainData(avs) {
+	var sumAvs = 0;
+	var sumAc = 0;
+	var sumComplementaryAC = 0;
+
+	var headers = ['Numéro d\'assuré', 'Date de naissance', 'Nom et prénom', 'Salaire AVS', 'Salaire AC', 'Salaire compl. AC', 'M/F'];
+	
+	headers = headers.map(function  (item) {
+		return {text: item, style: ['header', 'table_border', 'align_center']}
+	});
+
+	addOccupationPeriod(headers, 3);
+	
 	var certificateFooter = ['Total'];
 
 	for (var i = 1; i < headers.length; i++) {
@@ -377,133 +217,176 @@ function generate(data, req, res) {
 
 	var pdfData = [headers];
 
-	for (var i = 1; i < data.length; i++) {
+	for (var i = 0; i < avs.length; i++) {
 		var currentLine = [];
-		var fillColor = zebra_blue_gray;
+		var fillColor = gray;
 		if(i % 2 == 0)
-			fillColor = zebra_gray;
-		currentLine.push({text: data[i].insurerNo, fillColor: fillColor});
-		currentLine.push({text: data[i].dob, fillColor: fillColor});
-		currentLine.push({text: data[i].fullName, fillColor: fillColor});
-		currentLine.push({text: data[i].period.from, fillColor: fillColor});
-		currentLine.push({text: data[i].period.to, fillColor: fillColor});
-		currentLine.push({text: data[i].avsSalary, fillColor: fillColor});
-		currentLine.push({text: data[i].acSalary, fillColor: fillColor});
-		currentLine.push({text: data[i].acComplementarySalary, fillColor: fillColor});
-		currentLine.push({text: data[i].gender, fillColor: fillColor});
+			fillColor = blue_gray;
+
+		currentLine.push({text: avs[i].insurerNo, fillColor: fillColor, style: ['align_center']});
+		currentLine.push({text: formattedDate(avs[i].dob), fillColor: fillColor, style: ['align_center']});
+		currentLine.push({text: avs[i].fullName, fillColor: fillColor});
+		currentLine.push({text: formattedDate2(avs[i].period.from), fillColor: fillColor, style: ['align_center']});
+		currentLine.push({text: formattedDate2(avs[i].period.to), fillColor: fillColor, style: ['align_center']});
+		currentLine.push({text: formatAmount(avs[i].avsSalary), fillColor: fillColor, style: ['align_right']});
+		currentLine.push({text: formatAmount(avs[i].acSalary), fillColor: fillColor, style: ['align_right']});
+		currentLine.push({text: formatAmount(avs[i].acComplementarySalary), fillColor: fillColor, style: ['align_right']});
+		currentLine.push({text: avs[i].gender, fillColor: fillColor, style: ['align_center']});
 
 		pdfData.push(currentLine); 
+		
+		if(avs[i].avsSalary !== '')
+			sumAvs = calcSum(sumAvs, parseFloat(avs[i].avsSalary));
 
-		sumAvs += data[i].avsSalary !== '' ? parseFloat(data[i].avsSalary) : 0;
-		sumAc += data[i].acSalary !== '' ? parseFloat(data[i].acSalary) : 0;
-		sumComplementaryAC += data[i].acComplementarySalary !== '' ? parseFloat(data[i].acComplementarySalary) : 0;
+		if(avs[i].acSalary !== '')
+			sumAc = calcSum(sumAc, parseFloat(avs[i].acSalary));
+
+		if(avs[i].acComplementarySalary !== '')
+			sumComplementaryAC = calcSum(sumComplementaryAC, parseFloat(avs[i].acComplementarySalary));
 	}
 
 	certificateFooter[0] = {text: certificateFooter[0], style: ['header']};
-	certificateFooter[5] = {text: sumAvs + '', style: ['header']};
-	certificateFooter[6] = {text: sumAc + '', style: ['header']};
-	certificateFooter[7] = {text: sumComplementaryAC + '', style: ['header']};
-
+	certificateFooter[5] = {text: formatAmount((sumAvs).toFixed(2)) + '', style: ['header', 'align_right']};
+	certificateFooter[6] = {text: formatAmount((sumAc).toFixed(2)) + '', style: ['header', 'align_right']};
+	certificateFooter[7] = {text: formatAmount((sumComplementaryAC).toFixed(2)) + '', style: ['header', 'align_right']};
+	
 	pdfData.push(certificateFooter);
 
-	var formattedDate = function (date) {
-		if (date && '' != date) {
-			var d = new Date(date),
-			month = '' + (d.getMonth() + 1),
-			day = '' + d.getDate(),
-			year = d.getFullYear();
-			if (month.length < 2) month = '0' + month;
-			if (day.length < 2) day = '0' + day;
-			return [day, month, year].join('.');
-		} else {
-			return '';
+	return {
+		data: pdfData,
+		sum: {
+			avs: sumAvs,
+			ac: sumAc,
+			complementaryAc: sumComplementaryAC
+		}
+	};
+}
+
+function setHeader() {
+	return function(currentPage, pageCount) {
+		return [
+		{
+			columns: [
+			{
+				width: '*',
+				text: ''
+			},
+			{ 
+				table: {
+					widths: ['*', '*'],
+					body: [
+					['Date', { text:formattedDate(new Date()) + ''}], 
+					['Page', { text: currentPage.toString() + ' / ' + pageCount}]
+					]
+				}, 
+				layout: 'noBorders',
+				style: ['common'],
+				alignment: 'right',
+				width: 100
+			}
+			],
+			columnGap: 3,
+			style: ['common'],
+			margin: [0, 15, 50, 50]
+		}
+		];
+	}
+}
+
+function setInfo(data) {
+	return [ { table: {
+		headerRows: 1,
+		widths: [ '16.2%', '13%', '14%', '9%', '9%', '9%', '9%', '14%', '10%' ],
+		body: data,
+	},style:['common'],  
+	layout: {
+		hLineWidth: function (i, node) {
+			return 2;
+		},
+		vLineWidth: function (i, node) {
+			return 2;
+		},
+		hLineColor: function (i, node) {
+			return white;
+		},
+		vLineColor: function (i, node) {
+			return white;
+		},
+		paddingLeft: function (i, node) { return 2; },
+		paddingRight: function (i, node) { return 2; },
+		paddingTop: function (i, node) { return 2; },
+		paddingBottom: function (i, node) { return 2; }
+	}
+}];
+}
+
+function setSignatureFooter() {
+	return [{text: 'Date', style: ['common'], margin: [0, 15, 15, 15]}, {text: 'Signature', style: ['common']}];
+}
+
+
+function setRecap(data) {
+	return [ { table: {
+		headerRows: 1,
+		widths: [ '56%', '10%', '10%', '14%', '10%' ],
+		body: getSumData(data)
+	},style:['common'],  
+	layout: {
+		hLineWidth: function (i, node) {
+			return 2;
+		},
+		vLineWidth: function (i, node) {
+			return 2;
+		},
+		hLineColor: function (i, node) {
+			return white;
+		},
+		vLineColor: function (i, node) {
+			return white;
+		},
+		paddingLeft: function (i, node) { return 2; },
+		paddingRight: function (i, node) { return 2; },
+		paddingTop: function (i, node) { return 2; },
+		paddingBottom: function (i, node) { return 2; }
+	}
+}];
+}
+
+
+function generate(avsFactory, req, res) {
+	var  avs = avsFactory.avs;
+	var  excludedPeriods = avsFactory.excludedPeriods;
+	var avsData = getMainData(avs);
+	var excludedPeriodsData = getMainData(excludedPeriods);
+
+	var sumData = {
+		avsInclusive: {
+			avs: avsData.sum.avs,
+			ac: avsData.sum.ac,
+			complementaryAc: avsData.sum.complementaryAc
+		},
+		avsExclusive: {
+			avs: excludedPeriodsData.sum.avs,
+			ac: excludedPeriodsData.sum.ac,
+			complementaryAc: excludedPeriodsData.sum.complementaryAc
 		}
 	};
 
 	var docDefinition = {
-		header: function(currentPage, pageCount) {
-			return [
-			{
-				columns: [
-				{
-					width: '*',
-					text: ''
-				},
-				{ 
-					table: {
-						widths: ['*', '*'],
-						body: [
-						['Date', { text:formattedDate(new Date()) + ''}], 
-						['Page', { text: currentPage.toString() + '/' + pageCount}]
-						]
-					}, 
-					layout: 'noBorders',
-					style: ['common'],
-					alignment: 'right',
-					width: 100
-				}
-
-				],
-				columnGap: 3,
-				style: ['common'],
-				margin: [0, 15, 50, 50]
-			}
-
-			];
-		},
+		header: setHeader(),
 		content: [
-		{
-			table: {
-				widths: [ 200, 'auto'],
-				body: [
-				[{ text: avs_certificate, style: ['header']}, {text: new Date().getFullYear() + '', style: ['header']}], 
-				[ version , '']
-				]
-			}, 
-			layout: 'noBorders',
-			style: ['common']
-		},
-		{
-			table: {
-				widths: [ 100, 'auto', 'auto'],
-				body: [
-				[ address.locality + ' ' + address.canton, {text: compensation_fund, alignment: "right"}, {text: member_info.fund, alignment: "right"}],
-				[ address.street, {text: member_no, alignment: "right"}, {text: member_info.member_no, alignment: "right"}],
-				[address.zipCode + ' ' + address.nom_canton, '', '']
-				]
-			},
-			layout: 'noBorders',
-			style: ['common'],
-			marginBottom: 10
-		},
-		{
-			table: {
-				headerRows: 1,
-				widths: [ '16.2%', '13%', '14%', '9%', '9%', '9%', '9%', '14%', '10%' ],
-				body: pdfData,
-			},
-			style:['common'],  
-			layout: {
-				hLineWidth: function(i, node) {
-					return 2;
-				},
-				vLineWidth: function(i, node) {
-					return 2;
-				},
-				hLineColor: function(i, node) {
-					return header_white;
-				},
-				vLineColor: function(i, node) {
-					return header_white;
-				},
-				paddingLeft: function(i, node) { return 2; },
-				paddingRight: function(i, node) { return 2; },
-				paddingTop: function(i, node) { return 2; },
-				paddingBottom: function(i, node) { return 2; }
-			}
-		}, 
-		{text: 'Date', style: ['common'], margin: [0, 15, 15, 15]},
-		{text: 'Signature', style: ['common']}
+		setSubData(avs_certificate, year, version, address, compensation_fund, member_info),
+		setInfo(avsData.data),
+		setSignatureFooter(),
+		setPageBreak(),
+		setSubData(avs_excluded_period, year, version, address, compensation_fund, member_info),
+		setInfo(excludedPeriodsData.data),
+		setSignatureFooter(),
+		setPageBreak(),
+		setSubData(recap, year, version, address, compensation_fund, member_info, 'black_header'),
+		setRecap(sumData),
+		setInsurerTable(),
+		setSignatureFooter()
 		],
 		pageMargins: 40,
 		styles: {
@@ -511,12 +394,21 @@ function generate(data, req, res) {
 				fontSize: 6.5
 			},
 			header: {
-				bold: true,
-				color: 'white',
-				fillColor: header_blue_velvet
+				color: white,
+				fillColor: blue_velvet
 			},
 			table_border : {
 				margin: [0, 10, 0, 10]
+			},
+			align_center: {
+				alignment: 'center'
+			},
+			align_right: {
+				alignment: 'right'
+			},
+			black_header: {
+				color: white,
+				fillColor: black
 			}
 		}
 	};
@@ -527,7 +419,7 @@ function generate(data, req, res) {
 	pdfDoc.end();
 	res.writeHead(200, {
 		'Content-Type': 'application/pdf',
-		'Content-Disposition': 'inline; filename=' + fileName + ".pdf"
+		'Content-Disposition': 'inline; filename=' + fileName + '.pdf'
 	});
 	return;
 }
